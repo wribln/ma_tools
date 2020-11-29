@@ -1,0 +1,13 @@
+ma_list1.htm
+ma_list1.pdf
+ma_list2.htm
+ma_list2.pdf
+ma_tools.db
+ma_tools.sublime-workspace
+ma_tools.sublime-project
+main_test.py
+reference.htm
+__pycache__/*
+test/__pycache__/*
+lib/__pycache__/*
+venv/*
