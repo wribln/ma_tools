@@ -7,6 +7,7 @@ simple insertion into an existing list2.htm listing.
 Format is to suit radelnohnealter.de/presse format
 """
 import pyperclip
+import sys
 
 from lib import s_format_heading
 from lib import s_format_entry
@@ -17,10 +18,18 @@ def main() -> None:
     process one record from the clipboard
     """
 
-    # expect a complete record on the clipboard
+    # expect a complete record on the clipboard,
+    # or at least as many columns as needed for this functionality
 
     s_record = pyperclip.paste()
     l_record = list(s_record.split('\t'))
+
+    if len(l_record) < 10:
+        print(
+            '>>> insufficient data: clipboard contains only {0} columm(s)'
+            .format(len(l_record)+1)
+            )
+        sys.exit(1)
 
     print(s_format_heading(l_record[3]))
 
@@ -32,3 +41,4 @@ def main() -> None:
         l_record[2])
 
     print(s_entry)
+    pyperclip.copy(s_entry)

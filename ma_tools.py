@@ -20,8 +20,9 @@ Syntax:
             list<n> create a listing of the metadata
                     (-c, --config)
 
-            list2p  create a list2 snippet from a single record
-                    provided in the clipboard
+            list2p  create a list2 snippet from a single record (row)
+                    provided in the clipboard; return entry in clipboard
+                    ready to insert into HTML file
 
             makefn  helper to create local backup filenames from
                     date and title + optionally subtitle entries
