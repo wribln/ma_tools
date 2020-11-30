@@ -15,12 +15,13 @@ import datetime
 import sqlite3
 
 from os.path import basename, splitext
-from html import escape
+#from html import escape
 
 from lib import ConfigParams as CP
 from lib import ErrorReports as ER
 from lib import report_log
-from lib import s_fix_url_for_html
+from lib import s_format_heading
+from lib import s_format_entry
 
 
 def main(s_config_filename: str) -> None:
@@ -100,60 +101,17 @@ def main(s_config_filename: str) -> None:
                 o_output_file.write('</p>')
             s_last_place = ts_row[7]
             o_output_file.write(
-                "<p><strong>{0}</strong><br />\n"
-                .format(ts_row[7]))
+                "<p>" + s_format_heading(ts_row[7]) + "<br />\n")
 
-        # title with link
-
-        s_title = ts_row[0]
-        s_subt = ts_row[1]
-        if s_title is None:
-            s_title = '<???>'
-        s_title = escape(s_title)
-        if s_subt is not None:
-            s_title += '&nbsp;-&nbsp;' + escape(s_subt)
-
-        # url for title
-
-        s_item = ts_row[2]
-        if s_item is None:
-            s_prefix = ''
-            s_suffix = ''
-        else:
-            s_item = s_fix_url_for_html(s_item)
-            s_prefix = '<a href="{0}" target="_blank">'.format(s_item)
-            s_suffix = '</a>'
         o_output_file.write(
-            '{0}<i>{1}</i>{2}'
-            .format(s_prefix, s_title, s_suffix)
-        )
+            s_format_entry(
+                ts_row[0], # title
+                ts_row[1], # subtitle
+                ts_row[2], # url
+                ts_row[3], # media
+                ts_row[5]  # date
+                ))
 
-        # media, date
-
-        s_media = ts_row[3]
-        s_date = ts_row[5]
-        if s_date is not None:
-            ls_date = s_date.split('-')
-            if len(ls_date) == 1:
-                s_date = datetime.date(
-                    int(ls_date[0]), 1, 1).strftime('%Y')
-            elif len(ls_date) == 2:
-                s_date = datetime.date(
-                    int(ls_date[0]),
-                    int(ls_date[1]),
-                    1).strftime('%B %Y')
-            elif len(ls_date) == 3:
-                s_date = datetime.date(
-                    int(ls_date[0]),
-                    int(ls_date[1]),
-                    int(ls_date[2])).strftime('%d. %B %Y')
-            else:
-                s_date = None
-
-        s_item = ', '.join(filter(None, (s_media, s_date)))
-
-        if len(s_item) > 0:
-            o_output_file.write(' ({0})'.format(s_item))
         o_output_file.write('<br />\n')
 
         # that's it for this item

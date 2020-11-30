@@ -20,6 +20,9 @@ Syntax:
             list<n> create a listing of the metadata
                     (-c, --config)
 
+            list2p  create a list2 snippet from a single record
+                    provided in the clipboard
+
             makefn  helper to create local backup filenames from
                     date and title + optionally subtitle entries
 
@@ -47,7 +50,7 @@ import sys
 
 
 LS_SUBCMD = ['check', 'load', 'ping',
-             'list1', 'list2',
+             'list1', 'list2', 'list2p',
              'makefn', 'files', 'help']
 
 # versioning:   major.minor.intermediate
@@ -56,7 +59,7 @@ LS_SUBCMD = ['check', 'load', 'ping',
 #               minor increments with documentation update
 #               major increments with new documentation
 
-MA_VERSION = "1.0.0"
+MA_VERSION = "1.1.0"
 
 
 class ArgumentParser(argparse.ArgumentParser):
@@ -140,6 +143,11 @@ def main():
     if args.tool == 'list2':
         import lib.main_list2
         lib.main_list2.main(args.config.name)
+        sys.exit(0)
+
+    if args.tool == 'list2p':
+        import lib.main_list2p
+        lib.main_list2p.main()
         sys.exit(0)
 
     if args.tool == 'help':
