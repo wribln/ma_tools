@@ -50,9 +50,9 @@ import argparse
 import sys
 
 
-LS_SUBCMD = ['check', 'load', 'ping',
-             'list1', 'list2', 'list2p',
-             'makefn', 'files', 'help']
+LS_SUBCMD = [r'check', r'load', r'ping',
+             r'list1', r'list2', r'list2p',
+             r'makefn', r'files', r'help']
 
 # versioning:   major.minor.intermediate
 #
@@ -60,7 +60,7 @@ LS_SUBCMD = ['check', 'load', 'ping',
 #               minor increments with documentation update
 #               major increments with new documentation
 
-MA_VERSION = "1.1.1"
+MA_VERSION = "1.2.1"
 
 
 class ArgumentParser(argparse.ArgumentParser):
@@ -77,29 +77,29 @@ def init_argparse() -> ArgumentParser():
     Initialize argparse and return handle.
     """
     parser = ArgumentParser(
-        usage='%(prog)s [tool] [options]',
-        prog='ma_tools',
-        description='Media Archive toolset'
+        usage=r'%(prog)s [tool] [options]',
+        prog=r'ma_tools',
+        description=r'Media Archive toolset'
     )
     parser.add_argument(
-        'tool', choices=LS_SUBCMD, nargs='?',
-        default='help'
+        r'tool', choices=LS_SUBCMD, nargs='?',
+        default=r'help'
         )
     parser.add_argument(
-        '-v', '--version', action='version',
+        r'-v', r'--version', action=r'version',
         version=f"{parser.prog} " + MA_VERSION
     )
     parser.add_argument(
-        '-c', '--config', action='store',
-        type=argparse.FileType('r'),
-        default='ma_tools.ini'
+        r'-c', r'--config', action=r'store',
+        type=argparse.FileType(r'r'),
+        default=r'ma_tools.ini'
     )
     parser.add_argument(
-        '-p', '--ping', action='store_true',
+        r'-p', r'--ping', action=r'store_true',
         default=False
     )
     parser.add_argument(
-        '-x', '--exist', action='store_true',
+        r'-x', r'--exist', action=r'store_true',
         default=False
     )
     return parser
@@ -112,51 +112,51 @@ def main():
     parser = init_argparse()
     args = parser.parse_args()
 
-    if args.tool == 'makefn':
+    if args.tool == r'makefn':
         import lib.main_make
         lib.main_make.main()
         sys.exit(0)
 
-    if args.tool == 'check':
+    if args.tool == r'check':
         import lib.main_check
         sys.exit(lib.main_check.main(args.config.name, args.ping, args.exist))
 
-    if args.tool == 'ping':
+    if args.tool == r'ping':
         import lib.main_ping
         lib.main_ping.main(args.config.name)
         sys.exit(0)
 
-    if args.tool == 'load':
+    if args.tool == r'load':
         import lib.main_load
         lib.main_load.main(args.config.name)
         sys.exit(0)
 
-    if args.tool == 'files':
+    if args.tool == r'files':
         import lib.main_files
         lib.main_files.main(args.config.name)
         sys.exit(0)
 
-    if args.tool == 'list1':
+    if args.tool == r'list1':
         import lib.main_list1
         lib.main_list1.main(args.config.name)
         sys.exit(0)
 
-    if args.tool == 'list2':
+    if args.tool == r'list2':
         import lib.main_list2
         lib.main_list2.main(args.config.name)
         sys.exit(0)
 
-    if args.tool == 'list2p':
+    if args.tool == r'list2p':
         import lib.main_list2p
         lib.main_list2p.main()
         sys.exit(0)
 
-    if args.tool == 'help':
+    if args.tool == r'help':
         parser.print_help()
         sys.exit(0)
 
-    print('>>> NOT IMPLEMENTED: {0} <<<'.format(args.tool))
+    print(r'>>> NOT IMPLEMENTED: {0} <<<'.format(args.tool))
 
 
-if __name__ == "__main__":
+if __name__ == r'__main__':
     main()
