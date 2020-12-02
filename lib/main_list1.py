@@ -51,8 +51,8 @@ def main(s_config_filename: str) -> None:
     # insert base
 
     o_output_file.write(
-        '    <base href="{0}" target="_blank" />'
-        .format(s_backup_path)
+        '    <base href="{0}" target="_blank" />\n'
+        .format(s_fix_url_for_html(s_backup_path))
         )
 
     # copy part2 from template

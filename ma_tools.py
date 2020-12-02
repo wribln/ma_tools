@@ -60,7 +60,7 @@ LS_SUBCMD = ['check', 'load', 'ping',
 #               minor increments with documentation update
 #               major increments with new documentation
 
-MA_VERSION = "1.1.0"
+MA_VERSION = "1.1.1"
 
 
 class ArgumentParser(argparse.ArgumentParser):

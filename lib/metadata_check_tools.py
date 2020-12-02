@@ -10,7 +10,7 @@ import csv
 import os.path
 import re
 import glob
-from urllib.parse import urlparse
+from urllib.parse import urlparse, quote
 from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
 
@@ -59,7 +59,8 @@ def s_fix_url_for_html(s_url: str) -> str:
     Need to replace ampersands in urls by &amp; when used in HTML
     """
     assert s_url is not None, 'None is not a valid string'
-    return s_url.replace('&', '&amp;')
+    s_new_url = quote(s_url, "\./_-:")
+    return s_new_url.replace('&', '&amp;')
 
 
 def ls_import_valid_string_values(

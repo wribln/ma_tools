@@ -100,7 +100,7 @@ def main(
 
     if b_errors:
         report_log(
-            "\n*** heck reports {0} errors.\n"
+            "\n*** check reports {0} errors.\n"
             .format(o_error.n_error_count()))
         return 1
 
