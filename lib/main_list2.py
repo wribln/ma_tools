@@ -15,7 +15,6 @@ import datetime
 import sqlite3
 
 from os.path import basename, splitext
-#from html import escape
 
 from lib import ConfigParams as CP
 from lib import ErrorReports as ER
@@ -105,11 +104,11 @@ def main(s_config_filename: str) -> None:
 
         o_output_file.write(
             s_format_entry(
-                ts_row[0], # title
-                ts_row[1], # subtitle
-                ts_row[2], # url
-                ts_row[3], # media
-                ts_row[5]  # date
+                ts_row[0],  # title
+                ts_row[1],  # subtitle
+                ts_row[2],  # url
+                ts_row[3],  # media
+                ts_row[5]   # date
                 ))
 
         o_output_file.write('<br />\n')

@@ -34,7 +34,7 @@ def main(s_config_filename: str) -> None:
 
     locale.setlocale(locale.LC_TIME, 'de_DE')
 
-    s_backup_path = o_params.s_get_config_path('ref_files')
+    s_backup_base = o_params.s_get_config_path('ref_base')
     di_items = o_params.di_get_all_config_items(CP.METADATA_COLS)
     s_base_filename = splitext(basename(__file__))[0]
     o_output_file = open('ma_list1.htm', 'w')
@@ -52,7 +52,7 @@ def main(s_config_filename: str) -> None:
 
     o_output_file.write(
         '    <base href="{0}" target="_blank" />\n'
-        .format(s_fix_url_for_html(s_backup_path))
+        .format(s_fix_url_for_html(s_backup_base))
         )
 
     # copy part2 from template

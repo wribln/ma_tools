@@ -59,7 +59,7 @@ def s_fix_url_for_html(s_url: str) -> str:
     Need to replace ampersands in urls by &amp; when used in HTML
     """
     assert s_url is not None, 'None is not a valid string'
-    s_new_url = quote(s_url, "\./_-:")
+    s_new_url = quote(s_url, r"\./_-:")
     return s_new_url.replace('&', '&amp;')
 
 

@@ -22,6 +22,7 @@ _LS_CONFIG_SECTIONS = [         # sections
     'files',
     'paths',
     'vv_type_cols']
+
 _LS_CONFIG_ITEMS = ([
     [                           # items in first section
         'media',
@@ -50,9 +51,10 @@ _LS_CONFIG_ITEMS = ([
         'vv_types',
         'vv_ratings',
         'db_name'],
-    [
-        'ref_files'],
     [                           # items in fifth section
+        'ref_files',
+        'ref_base'],
+    [                           # items in sixth section
         'type_code',
         'type_description']
     ])
