@@ -8,6 +8,7 @@ Format is to suit radelnohnealter.de/presse format
 """
 import pyperclip
 import sys
+import locale
 
 from lib import s_format_heading
 from lib import s_format_entry
@@ -17,6 +18,8 @@ def main() -> None:
     """
     process one record from the clipboard
     """
+
+    locale.setlocale(locale.LC_ALL,"de_DE.utf-8")
 
     # expect a complete record on the clipboard,
     # or at least as many columns as needed for this functionality

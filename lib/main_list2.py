@@ -35,7 +35,7 @@ def main(s_config_filename: str) -> None:
     o_error = ER()
     o_params = CP(o_error, s_config_filename)
 
-    locale.setlocale(locale.LC_TIME, 'de_DE')
+    locale.setlocale(locale.LC_TIME, 'de_DE.utf-8')
 
     s_base_filename = splitext(basename(__file__))[0]
     o_output_file = open('ma_list2.htm', 'w')

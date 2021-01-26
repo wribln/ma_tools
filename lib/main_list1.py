@@ -32,7 +32,7 @@ def main(s_config_filename: str) -> None:
     o_error = ER()
     o_params = CP(o_error, s_config_filename)
 
-    locale.setlocale(locale.LC_TIME, 'de_DE')
+    locale.setlocale(locale.LC_TIME, 'de_DE.utf-8')
 
     s_backup_base = o_params.s_get_config_path('ref_base')
     di_items = o_params.di_get_all_config_items(CP.METADATA_COLS)
