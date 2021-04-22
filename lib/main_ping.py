@@ -42,8 +42,9 @@ def main(s_config_filename: str) -> int:
     n_count_bad = [0, 0]
 
     for ts_row in o_dbcursor.execute(
-            'SELECT id, title, url, ref_copy FROM ' + CP.METADATA_TABLE +
-            ' WHERE url NOT NULL;'
+            'SELECT id, title, url, ref_copy FROM '
+            + CP.METADATA_TABLE
+            + ' WHERE url NOT NULL;'
             ):
 
         n_count_recs += 1
@@ -79,8 +80,8 @@ def main(s_config_filename: str) -> int:
                 )
 
         o_dbconn.execute(
-            'UPDATE ' + CP.METADATA_TABLE +
-            ' SET url_ok = ?, ref_ok = ? WHERE ID = ?;',
+            'UPDATE ' + CP.METADATA_TABLE
+            + ' SET url_ok = ?, ref_ok = ? WHERE ID = ?;',
             [i_result_1, i_result_2, ts_row[0]])
         o_dbconn.commit()
 

@@ -19,7 +19,7 @@ def main() -> None:
     process one record from the clipboard
     """
 
-    locale.setlocale(locale.LC_ALL,"de_DE.utf-8")
+    locale.setlocale(locale.LC_ALL, "de_DE.utf-8")
 
     # expect a complete record on the clipboard,
     # or at least as many columns as needed for this functionality
