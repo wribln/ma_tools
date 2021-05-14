@@ -6,9 +6,9 @@ simple insertion into an existing list2.htm listing.
 
 Format is to suit radelnohnealter.de/presse format
 """
-import pyperclip
 import sys
 import locale
+import pyperclip
 
 from lib import s_format_heading
 from lib import s_format_entry

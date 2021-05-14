@@ -351,7 +351,8 @@ def main(
                     s_check_item = s_backup_path + s_check_item
                     s_basename = basename(s_check_item)
                     s_file_no_ext = splitext(s_basename)[0]
-                    if len(s_backup_filename) > 0 and s_file_no_ext != s_backup_filename:
+                    if len(s_backup_filename) > 0 and \
+                            s_file_no_ext != s_backup_filename:
                         o_error.report_with_std_msg(
                             o_reader.line_num,
                             sl_labels[i_column],

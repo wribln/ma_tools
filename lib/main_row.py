@@ -8,10 +8,10 @@ format is to suit radelnohnealter.de/presse)
 
 Pass a media flag to prefix HTML snippet with icon.
 """
-import pyperclip
 import sys
 import locale
 import re
+import pyperclip
 
 from lib import s_format_heading
 from lib import s_format_entry
@@ -31,12 +31,16 @@ _COL_COUNT = 10  # total number of columns
 
 def s_format_backup_filename(
         s_date: str, s_title: str, s_subtitle: str) -> str:
+    """
+    create filename for backup file using date, title and
+    - optionally - subtitle
+    """
 
     s_date_new = (s_date.replace('-', '') + '00000000')[:8]
     return s_make_backup_filename(s_date_new, s_title, s_subtitle)
 
 
-def main(s_config_filename: str, s_media_type: str) -> None:
+def main(s_media_type: str) -> None:
     """
     process one record from the clipboard
     """
@@ -98,7 +102,7 @@ def main(s_config_filename: str, s_media_type: str) -> None:
     # check date
 
     s_date = s_check_date(l_record[_COL_DATE])
-    b_ok = (b_ok and (s_date != 'invalid' and s_date != 'too early'))
+    b_ok = (b_ok and (s_date not in ('invalid', 'too early')))
 
     if not b_ok:
         sys.exit(1)

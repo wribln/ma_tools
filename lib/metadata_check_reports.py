@@ -95,3 +95,8 @@ def report_log(s_text: str):
     the global error count (useful to output subtitles)
     """
     print(s_text)
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()

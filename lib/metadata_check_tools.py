@@ -58,9 +58,13 @@ _CL_XLAT = (
 def s_fix_url_for_html(s_url: str) -> str:
     """
     Need to replace ampersands in urls by &amp; when used in HTML
+
+    >>> s_fix_url_for_html('file://a_file_with_ampersand_&')
+    'file://a_file_with_ampersand_&amp;'
+
     """
     assert s_url is not None, 'None is not a valid string'
-    s_new_url = quote(s_url, r"\./_-:")
+    s_new_url = quote(s_url, r"\./_-:&")
     return s_new_url.replace('&', '&amp;')
 
 
@@ -146,11 +150,25 @@ def s_check_date(s_text: str) -> str:
     * YYYY          year only
     * YYYY-MM       year + month
     * YYYY-MM-DD    year, month, date
-    Returns
-    * 00000000      for an empty or illformatted string
-    * invalid       for invalid date, e.g. 2020-02-30
-    * too early     if date is before start of CWA
-    * YYYYMMDD      with zeros for missing information (day, day and month)
+
+        Returns:
+            00000000    for an empty or illformatted string
+            invalid     for invalid date, e.g. 2020-02-30
+            too early   if date is before start of CWA
+            YYYYMMDD    with zeros for missing information (day, day and month)
+
+    >>> s_check_date('')
+    '00000000'
+
+    >>> s_check_date('2020-02-30')
+    'invalid'
+
+    >>> s_check_date('2002-02-02')
+    'too early'
+
+    >>> s_check_date('2020-02-02')
+    '20200202'
+
     """
     o_match = re.search('^([0-9]{4})(-([0-9]{2})(-([0-9]{2}))*)*$', s_text)
     if o_match is not None:
@@ -229,12 +247,25 @@ def s_trim(s_text: str, i_max_len: int) -> str:
     If the string is longer than i_max_len, the string is trimmed to
     i_max_len - 3 characters and '...' is added to the string to indicate
     that the string is longer.
+
+    >>> s_trim('123', 5)
+    '123'
+
+    >>> s_trim('12345', 5)
+    '12345'
+
+    >>> s_trim('123456', 5)
+    '12...'
+
+    >>> s_trim('1234567890', 5)
+    '12...'
+
     """
     assert i_max_len > 4, 'i_max_len <= 4 does not make sense'
 
     if len(s_text) <= i_max_len:
         return s_text
-    return s_text[:(i_max_len - 2)] + '...'
+    return s_text[:(i_max_len - 3)] + '...'
 
 
 def s_check_url(url: str) -> str:
@@ -306,7 +337,18 @@ def s_url_is_alive(url: str) -> str:
 def s_make_filename(s_text: str) -> str:
     """
     Convert the given string to a suitable filename;
-    filename is longer than 55 characters will be trimmed
+    filename is longer than 56 characters will be trimmed
+
+    >>> s_make_filename('test')
+    'test'
+
+    >>> s_make_filename('Ümläüte_and more:\\ ÄöÖ')
+    'Uemlaeuete_and_more_AeoeOe'
+
+    >>> s_make_filename('123456789 123456789 123456789 123456789 123456789' + \
+        ' 123456789')
+    '123456789_123456789_123456789_123456789_123456789_123456'
+
     """
     s_old = s_text.encode('latin-1', 'ignore')
     s_new = str()
@@ -322,12 +364,25 @@ def s_make_backup_filename(s_date: str, s_title: str, s_subtitle: str) -> str:
     """
     If s_title too general, add subtitle.
     Prepend date. Return empty string on error.
+
+    >>> s_make_backup_filename('20200202', '', '')
+    ''
+
+    >>> s_make_backup_filename('20200202', 'test', 'test')
+    '20200202_test'
+
+    >>> s_make_backup_filename('20200202', 'test', '')
+    '20200202_test'
+
+    >>> s_make_backup_filename('20200202', 'Radeln ohne Alter', 'test')
+    '20200202_Radeln_ohne_Alter_-_test'
+
     """
     assert len(s_date) == 8, 's_date must be exactly 8 characters long'
     s_filename = s_title
     if len(s_title) == 0:
         return ''
-    elif s_title == 'Radeln ohne Alter' and len(s_subtitle) > 0:
+    if s_title == 'Radeln ohne Alter' and len(s_subtitle) > 0:
         s_filename = s_title + '_-_' + s_subtitle
     return s_date + '_' + s_make_filename(s_filename)
 
@@ -339,3 +394,8 @@ def b_files_exist(s_file: str) -> bool:
     given location
     """
     return len(glob.glob(s_file)) > 0
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()

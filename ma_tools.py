@@ -68,7 +68,7 @@ LS_SUBCMD = [r'check', r'load', r'ping',
 #               minor increments with documentation update
 #               major increments with new documentation
 
-MA_VERSION = "1.3.0"
+MA_VERSION = "1.3.1"
 
 
 class ArgumentParser(argparse.ArgumentParser):
@@ -160,7 +160,7 @@ def main():
 
     if args.tool == r'row':
         import lib.main_row
-        sys.exit(lib.main_row.main(args.config.name, args.media))
+        sys.exit(lib.main_row.main(args.media))
 
     if args.tool == r'list2p':
         import lib.main_list2p

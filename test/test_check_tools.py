@@ -149,7 +149,7 @@ class TestImportValidStringValues(unittest.TestCase):
         """
         self.assertEqual(lib.s_trim('0123456789', 11), '0123456789')
         self.assertEqual(lib.s_trim('0123456789', 10), '0123456789')
-        self.assertEqual(lib.s_trim('0123456789', 9), '0123456...')
+        self.assertEqual(lib.s_trim('0123456789', 9), '012345...')
 
     def test_s_make_filename(self):
         """

@@ -6,7 +6,7 @@ to ensure consistent formatting
 from html import escape
 import datetime
 
-from lib import s_fix_url_for_html
+from metadata_check_tools import s_fix_url_for_html
 
 _MEDIA_ICON = {
     'video': '<span style="font-family:FontAwesome;">&#xf03d;&nbsp;</span>',
@@ -20,6 +20,8 @@ def s_format_heading(s_text: str) -> str:
     """
     return "<strong>{0}</strong>".format(s_text)
 
+# pylint: disable=too-many-arguments
+
 
 def s_format_entry(
         s_maintitle: str,
@@ -27,7 +29,7 @@ def s_format_entry(
         s_url: str,
         s_media: str,
         s_date: str,
-        s_media_type,
+        s_media_type='other'
         ) -> str:
     """
     format complete record
@@ -87,3 +89,8 @@ def s_format_entry(
             s_result += ' ({0})'.format(s_item)
 
     return s_result
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()

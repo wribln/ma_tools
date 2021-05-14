@@ -7,8 +7,8 @@ ma_tools.sublime-workspace
 ma_tools.sublime-project
 main_test.py
 reference.htm
+test/test_check_tools_no_read.csv
 __pycache__/*
 test/__pycache__/*
-test/test_check_tools_no_read.csv
 lib/__pycache__/*
 venv/*
