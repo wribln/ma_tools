@@ -10,6 +10,7 @@ import csv
 import os.path
 import re
 import glob
+import datetime
 from urllib.parse import urlparse, quote
 from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
@@ -122,7 +123,7 @@ def ls_import_valid_string_values(
             "Reason: >{1}<".
             format(s_csv_file, o_this_error.strerror))
 
-    except StopIteration as o_this_error:
+    except StopIteration:
         o_error.report_error(
             "File is empty >{0}<".format(s_csv_file))
 
@@ -137,6 +138,44 @@ def b_is_valid_path(s_path: str) -> bool:
     assert len(s_path) > 0, 's_path must not be empty'
 
     return os.path.isdir(s_path)
+
+
+def s_check_date(s_text: str) -> str:
+    """
+    Check if date is correctly formatted, i.e. permitted formats are:
+    * YYYY          year only
+    * YYYY-MM       year + month
+    * YYYY-MM-DD    year, month, date
+    Returns
+    * 00000000      for an empty or illformatted string
+    * invalid       for invalid date, e.g. 2020-02-30
+    * too early     if date is before start of CWA
+    * YYYYMMDD      with zeros for missing information (day, day and month)
+    """
+    o_match = re.search('^([0-9]{4})(-([0-9]{2})(-([0-9]{2}))*)*$', s_text)
+    if o_match is not None:
+        s_date = o_match.group(0).replace('-', '')
+        try:
+            o_date = datetime.date(int(o_match.group(1)), 1, 1)
+            if o_match.group(3) is None:
+                s_date += '0000'
+            else:
+                o_date = o_date.replace(month=int(o_match.group(3)))
+                if o_match.group(5) is None:
+                    s_date += '00'
+                else:
+                    o_date = o_date.replace(day=int(o_match.group(5)))
+
+        except ValueError:
+            s_date = 'invalid'
+
+        if o_date < datetime.date(2013, 1, 1):
+            s_date = 'too early'
+
+    else:
+        s_date = '00000000'
+
+    return s_date
 
 
 def s_check_for_valid_file(s_file: str, o_error=None) -> str:
@@ -277,6 +316,20 @@ def s_make_filename(s_text: str) -> str:
         elif i_char in _CD_XLAT:
             s_new += _CD_XLAT[i_char]
     return s_new[:56]
+
+
+def s_make_backup_filename(s_date: str, s_title: str, s_subtitle: str) -> str:
+    """
+    If s_title too general, add subtitle.
+    Prepend date. Return empty string on error.
+    """
+    assert len(s_date) == 8, 's_date must be exactly 8 characters long'
+    s_filename = s_title
+    if len(s_title) == 0:
+        return ''
+    elif s_title == 'Radeln ohne Alter' and len(s_subtitle) > 0:
+        s_filename = s_title + '_-_' + s_subtitle
+    return s_date + '_' + s_make_filename(s_filename)
 
 
 def b_files_exist(s_file: str) -> bool:

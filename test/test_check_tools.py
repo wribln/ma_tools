@@ -176,6 +176,27 @@ class TestImportValidStringValues(unittest.TestCase):
             'With_a__dash,_and_some_(special)_characters_'
         )
 
+    def test_s_make_backup_filename(self):
+        """
+        Test procedure
+        """
+        with self.assertRaises(AssertionError):
+            lib.s_make_backup_filename('', 'test', 'test')
+        with self.assertRaises(AssertionError):
+            lib.s_make_backup_filename('2020020', 'test', 'test')
+        with self.assertRaises(AssertionError):
+            lib.s_make_backup_filename('202002020', 'test', 'test')
+        self.assertEqual(
+            lib.s_make_backup_filename(
+                '20200202', 'a_file', ''), '20200202_a_file')
+        self.assertEqual(
+            lib.s_make_backup_filename(
+                '20200202', '', 'mit Wind in den Haaren'), '')
+        self.assertEqual(
+            lib.s_make_backup_filename(
+                '20200202', 'Radeln ohne Alter', 'mit Wind in den Haaren'),
+            '20200202_Radeln_ohne_Alter_-_mit_Wind_in_den_Haaren')
+
     def test_b_files_exist(self):
         """
         Test procedure
@@ -191,6 +212,17 @@ class TestImportValidStringValues(unittest.TestCase):
         self.assertTrue(lib.b_is_valid_path('test/'))
         self.assertTrue(lib.b_is_valid_path('lib/'))
         self.assertFalse(lib.b_is_valid_path('test/config_good.ini'))
+
+    def test_s_check_date(self):
+        """
+        Test procedure
+        """
+        self.assertEqual(lib.s_check_date(''), '00000000')
+        self.assertEqual(lib.s_check_date('2020-02-02'), '20200202')
+        self.assertEqual(lib.s_check_date('2020-02'), '20200200')
+        self.assertEqual(lib.s_check_date('2020'), '20200000')
+        self.assertEqual(lib.s_check_date('2020-02-30'), 'invalid')
+        self.assertEqual(lib.s_check_date('2000-01-01'), 'too early')
 
 
 if __name__ == '__main__':

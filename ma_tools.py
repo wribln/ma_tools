@@ -20,18 +20,24 @@ Syntax:
             list<n> create a listing of the metadata
                     (-c, --config)
 
-            list2p  create a list2 snippet from a single record (row)
-                    provided in the clipboard; return entry in clipboard
-                    ready to insert into HTML file
-
-            makefn  helper to create local backup filenames from
-                    date and title + optionally subtitle entries
-
             files   utility to check if files in database match
                     files in archive folder
                     (-c, --config)
 
+            row     processes a single row from the media archive:
+                    perform some checks, output a generated backup filename,
+                    and create an HTML snippet suitable for inclusion in the
+                    radelnohnealter.de/presse webpage.
+                    (-m, --media)
+
             help    outputs this text
+
+            makefn  helper to create local backup filenames from
+                    date and title + optionally subtitle entries
+
+            list2p  create a list2 snippet from a single record (row)
+                    provided in the clipboard; return entry in clipboard
+                    ready to insert into HTML file
 
     options:
 
@@ -41,6 +47,8 @@ Syntax:
     -x, --exist         check if files exist (check only)
     -h, --help          outputs this text or specific information about
                         the selected tool
+    -m, --media         inserts an icon for specific media types, i.e.
+                        'video', 'sound' (row only)
     -v, --version       reports the version of program
 """
 # The above is the help text output for -h/--help !!
@@ -51,8 +59,8 @@ import sys
 
 
 LS_SUBCMD = [r'check', r'load', r'ping',
-             r'list1', r'list2', r'list2p',
-             r'makefn', r'files', r'help']
+             r'list1', r'list2', r'files', r'help',
+             r'row', r'list2p', r'makefn']
 
 # versioning:   major.minor.intermediate
 #
@@ -60,7 +68,7 @@ LS_SUBCMD = [r'check', r'load', r'ping',
 #               minor increments with documentation update
 #               major increments with new documentation
 
-MA_VERSION = "1.2.2"
+MA_VERSION = "1.3.0"
 
 
 class ArgumentParser(argparse.ArgumentParser):
@@ -84,7 +92,11 @@ def init_argparse() -> ArgumentParser():
     parser.add_argument(
         r'tool', choices=LS_SUBCMD, nargs='?',
         default=r'help'
-        )
+    )
+    parser.add_argument(
+        r'-m', r'--media', choices=['other', 'video', 'sound'], nargs='?',
+        default=r'other'
+    )
     parser.add_argument(
         r'-v', r'--version', action=r'version',
         version=f"{parser.prog} " + MA_VERSION
@@ -145,6 +157,10 @@ def main():
         import lib.main_list2
         lib.main_list2.main(args.config.name)
         sys.exit(0)
+
+    if args.tool == r'row':
+        import lib.main_row
+        sys.exit(lib.main_row.main(args.config.name, args.media))
 
     if args.tool == r'list2p':
         import lib.main_list2p

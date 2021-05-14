@@ -12,13 +12,12 @@ specifications.
 
 import csv
 import re
-import datetime
 from os.path import basename, splitext
 
 from lib import ErrorReports, ConfigParams
-from lib import report_log, s_check_for_valid_file, s_make_filename, \
+from lib import report_log, s_check_for_valid_file, \
     s_url_is_alive, s_trim, ls_import_valid_string_values, b_is_valid_path, \
-    s_check_url
+    s_check_url, s_make_backup_filename, s_check_date
 
 
 def fix_labels(n_max_col: int, sl_labels: list):
@@ -264,6 +263,17 @@ def main(
                                 "This field must not be empty."
                             )
                         return False
+
+                    # must not permit newlines within strings as they
+                    # are counted by o_reader.line_num
+
+                    if len(re.findall('\n', sl_row[i_column])) > 0:
+                        o_error.report_with_std_msg(
+                            o_reader.line_num,
+                            sl_labels[i_column],
+                            "This item must not contain new line characters.")
+                        return False
+
                     return True
 
                 # check valid values (type, region)
@@ -305,53 +315,35 @@ def main(
 
                 # check date format: YYYY, YYYY-MM, YYYY-MM-DD
 
-                s_date = '00000000'
                 if b_pass_basic_checks('date', sl_row):
-                    o_match = re.search(
-                        '^([0-9]{4})(-([0-9]{2})(-([0-9]{2}))*)*$',
-                        s_check_item
-                    )
-                    if o_match is not None:
-                        s_date = o_match.group(0).replace('-', '')
-                        try:
-                            o_date = datetime.date(int(o_match.group(1)), 1, 1)
-                            if o_match.group(3) is None:
-                                s_date += '00'
-                            else:
-                                o_date.replace(month=int(o_match.group(3)))
-                            if o_match.group(5) is None:
-                                s_date += '00'
-                            else:
-                                o_date.replace(day=int(o_match.group(5)))
-                        except ValueError:
-                            o_error.report_with_std_msg(
-                                o_reader.line_num,
-                                sl_labels[i_column],
-                                "'{0}' is not a valid date."
-                                .format(s_check_item)
-                            )
-                        if o_date < datetime.date(2013, 1, 1):
-                            o_error.report_with_std_msg(
-                                o_reader.line_num,
-                                sl_labels[i_column],
-                                "'{0}' is before start of 'CWA'."
-                                .format(s_check_item)
-                            )
+                    s_date = s_check_date(s_check_item)
+                else:
+                    s_date = 'invalid'
+
+                if s_date == 'invalid':
+                    o_error.report_with_std_msg(
+                        o_reader.line_num, sl_labels[i_column],
+                        "'{0}' is not a valid date.".format(s_check_item))
+                elif s_date == 'too early':
+                    o_error.report_with_std_msg(
+                        o_reader.line_num, sl_labels[i_column],
+                        "'{0}' is before start of 'CWA'.".format(s_check_item))
 
                 # check title
 
                 if b_pass_basic_checks('title', sl_row, b_required=True):
                     # create filename for backup url
-                    s_backup_filename = s_check_item
+                    s_title = s_check_item
+                else:
+                    s_title = ''
 
                 # check subtitle
 
                 if b_pass_basic_checks('subtitle', sl_row):
-                    if s_backup_filename == 'Radeln ohne Alter':
-                        s_backup_filename += ('_-_' + s_check_item)
-
-                s_backup_filename = \
-                    s_date + '_' + s_make_filename(s_backup_filename)
+                    s_backup_filename =\
+                        s_make_backup_filename(s_date, s_title, s_check_item)
+                else:
+                    s_backup_filename = ''
 
                 # check reference copy
 
@@ -359,7 +351,7 @@ def main(
                     s_check_item = s_backup_path + s_check_item
                     s_basename = basename(s_check_item)
                     s_file_no_ext = splitext(s_basename)[0]
-                    if s_file_no_ext != s_backup_filename:
+                    if len(s_backup_filename) > 0 and s_file_no_ext != s_backup_filename:
                         o_error.report_with_std_msg(
                             o_reader.line_num,
                             sl_labels[i_column],

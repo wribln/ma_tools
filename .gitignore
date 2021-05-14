@@ -9,5 +9,6 @@ main_test.py
 reference.htm
 __pycache__/*
 test/__pycache__/*
+test/test_check_tools_no_read.csv
 lib/__pycache__/*
 venv/*

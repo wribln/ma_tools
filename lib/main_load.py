@@ -105,8 +105,8 @@ def main(s_config_filename: str) -> None:
     sl_items = [None] * n_max_col
 
     s_db_cmd = (
-        'CREATE TABLE ' + CP.METADATA_TABLE +
-        ' (ID INT PRIMARY KEY NOT NULL, '
+        'CREATE TABLE ' + CP.METADATA_TABLE
+        + ' (ID INT PRIMARY KEY NOT NULL, '
     )
 
     for s_item, i_col in id_items.items():

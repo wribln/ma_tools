@@ -8,6 +8,11 @@ import datetime
 
 from lib import s_fix_url_for_html
 
+_MEDIA_ICON = {
+    'video': '<span style="font-family:FontAwesome;">&#xf03d;&nbsp;</span>',
+    'sound': '<span style="font-family:FontAwesome;">&#xf130;&nbsp;</span>'
+}
+
 
 def s_format_heading(s_text: str) -> str:
     """
@@ -21,7 +26,8 @@ def s_format_entry(
         s_subtitle: str,
         s_url: str,
         s_media: str,
-        s_date: str
+        s_date: str,
+        s_media_type,
         ) -> str:
     """
     format complete record
@@ -45,14 +51,14 @@ def s_format_entry(
         s_suffix = ''
     else:
         s_prefix = (
-            '<a href="{0}" target="_blank">'
+            '<a href="{0}" target="_blank" rel="noopener noreferrer">'
             .format(s_fix_url_for_html(s_url))
             )
         s_suffix = '</a>'
 
     s_result = (
-        '{0}<i>{1}</i>{2}'
-        .format(s_prefix, s_title, s_suffix)
+        '{0}{1}<i>{2}</i>{3}'
+        .format(s_prefix, _MEDIA_ICON.get(s_media_type, ''), s_title, s_suffix)
         )
 
     # media, date
