@@ -6,7 +6,7 @@ to ensure consistent formatting
 from html import escape
 import datetime
 
-from metadata_check_tools import s_fix_url_for_html
+from .metadata_check_tools import s_fix_url_for_html
 
 _MEDIA_ICON = {
     'video': '<span style="font-family:FontAwesome;">&#xf03d;&nbsp;</span>',

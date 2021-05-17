@@ -6,8 +6,8 @@ available to the utilities.
 from configparser import ConfigParser, Error
 from sys import exit as sysexit
 
-from metadata_check_reports import ErrorReports, report_log
-from metadata_check_tools import s_check_for_valid_file
+from .metadata_check_reports import ErrorReports, report_log
+from .metadata_check_tools import s_check_for_valid_file
 
 # The program parameters are read from the configuration file.
 # Since defaults do not make much sense here, all parameters
