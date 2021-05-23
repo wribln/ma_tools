@@ -44,7 +44,9 @@ def s_format_entry(
     s_title = escape(s_title)
 
     if s_subtitle is not None and len(s_subtitle) > 0:
-        s_title += '&nbsp;-&nbsp;' + escape(s_subtitle)
+        if s_subtitle[0] != '(':
+            s_title += '&nbsp;&ndash;'
+        s_title += ' ' + escape(s_subtitle)
 
     # url
 
