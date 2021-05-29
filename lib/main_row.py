@@ -53,7 +53,7 @@ def main(s_media_type: str) -> None:
     s_record = pyperclip.paste()
     l_record = list(s_record.split('\t'))
 
-    if len(l_record) < 10:
+    if len(l_record) < _COL_COUNT:
         print(
             '>>> insufficient data: clipboard contains only {0} columm(s)'
             .format(len(l_record)+1)

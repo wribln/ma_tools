@@ -18,7 +18,7 @@ def s_format_heading(s_text: str) -> str:
     """
     format text as intermediate heading (place)
     """
-    return "<strong>{0}</strong>".format(s_text)
+    return "<h3>{0}</h3>".format(s_text)
 
 # pylint: disable=too-many-arguments
 
