@@ -23,6 +23,7 @@ from lib import s_check_date
 _COL_MEDIA = 1
 _COL_DATE = 2
 _COL_PLACE = 3
+_COL_REGION = 4
 _COL_TITLE = 6
 _COL_SUBTITLE = 7
 _COL_URL = 9
@@ -95,9 +96,17 @@ def main(s_media_type: str) -> None:
     b_ok = b_pass_basic_checks(_COL_URL) \
         and b_pass_basic_checks(_COL_DATE, True) \
         and b_pass_basic_checks(_COL_MEDIA, True) \
-        and b_pass_basic_checks(_COL_PLACE, True) \
+        and b_pass_basic_checks(_COL_PLACE) \
+        and b_pass_basic_checks(_COL_REGION, True) \
         and b_pass_basic_checks(_COL_TITLE, True) \
         and b_pass_basic_checks(_COL_SUBTITLE)
+
+    # fix place if only region given
+
+    if len(l_record[_COL_PLACE]) > 0:
+        s_region = l_record[_COL_PLACE]
+    else:
+        s_region = l_record[_COL_REGION]
 
     # check date
 
@@ -116,7 +125,7 @@ def main(s_media_type: str) -> None:
         )
     print("\n{0}\n".format(s_filename))
 
-    print(s_format_heading(l_record[_COL_PLACE]))
+    print(s_format_heading(s_region))
     print(s_format_entry(
         l_record[_COL_TITLE],
         l_record[_COL_SUBTITLE],
