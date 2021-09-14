@@ -28,7 +28,6 @@ Syntax:
                     perform some checks, output a generated backup filename,
                     and create an HTML snippet suitable for inclusion in the
                     radelnohnealter.de/presse webpage.
-                    (-m, --media)
 
             help    outputs this text
 
@@ -48,7 +47,7 @@ Syntax:
     -h, --help          outputs this text or specific information about
                         the selected tool
     -m, --media         inserts an icon for specific media types, i.e.
-                        'video', 'sound' (row only)
+                        'video', 'audio' (row only)
     -v, --version       reports the version of program
 """
 # The above is the help text output for -h/--help !!
@@ -68,7 +67,7 @@ LS_SUBCMD = [r'check', r'load', r'ping',
 #               minor increments with documentation update
 #               major increments with new documentation
 
-MA_VERSION = "1.3.5"
+MA_VERSION = "1.4.0"
 
 
 class ArgumentParser(argparse.ArgumentParser):
@@ -94,7 +93,7 @@ def init_argparse() -> ArgumentParser():
         default=r'help'
     )
     parser.add_argument(
-        r'-m', r'--media', choices=['other', 'video', 'sound'], nargs='?',
+        r'-m', r'--media', choices=['other', 'video', 'audio'], nargs='?',
         default=r'other'
     )
     parser.add_argument(

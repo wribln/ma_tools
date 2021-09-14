@@ -5,8 +5,6 @@ a HTML snippet for a single reference from the clipboard. This is for
 situations when a new reference should be processed quickly for simple
 insertion into an existing list2.htm listing or unto the website (the
 format is to suit radelnohnealter.de/presse)
-
-Pass a media flag to prefix HTML snippet with icon.
 """
 import sys
 import locale
@@ -27,7 +25,8 @@ _COL_REGION = 4
 _COL_TITLE = 6
 _COL_SUBTITLE = 7
 _COL_URL = 9
-_COL_COUNT = 10  # total number of columns
+_COL_COMMENT = 12
+_COL_COUNT = 13  # total number of columns needed to process request
 
 
 def s_format_backup_filename(
@@ -41,7 +40,7 @@ def s_format_backup_filename(
     return s_make_backup_filename(s_date_new, s_title, s_subtitle)
 
 
-def main(s_media_type: str) -> None:
+def main() -> None:
     """
     process one record from the clipboard
     """
@@ -116,6 +115,18 @@ def main(s_media_type: str) -> None:
     if not b_ok:
         sys.exit(1)
 
+    # check remarks for tags
+
+    b_paywall = (re.search('#paywall', l_record[_COL_COMMENT], re.I)
+                 is not None)
+
+    if re.search('#video', l_record[_COL_COMMENT], re.I) is not None:
+        s_media_type = 'video'
+    elif re.search('#audio', l_record[_COL_COMMENT], re.I) is not None:
+        s_media_type = 'audio'
+    else:
+        s_media_type = 'other'
+
     # done checking and preparing, ready to start output
 
     s_filename = s_format_backup_filename(
@@ -132,7 +143,8 @@ def main(s_media_type: str) -> None:
         l_record[_COL_URL],
         l_record[_COL_MEDIA],
         l_record[_COL_DATE],
-        s_media_type))
+        s_media_type,
+        b_paywall))
     print()
 
     pyperclip.copy(s_filename)

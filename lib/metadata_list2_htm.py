@@ -4,14 +4,30 @@ provides several HTML formatting functions to be used by list2, list2p
 to ensure consistent formatting
 """
 from html import escape
+from functools import reduce
 import datetime
 
 from .metadata_check_tools import s_fix_url_for_html
 
-_MEDIA_ICON = {
-    'video': '<span style="font-family:FontAwesome;">&#xf03d;&nbsp;</span>',
-    'sound': '<span style="font-family:FontAwesome;">&#xf130;&nbsp;</span>'
+_ICON_PAYWALL = '&#xf023;'
+_ICON_MEDIA = {
+    'video': '&#xf03d;',
+    'audio': '&#xf130;'
 }
+
+
+def s_icons(s_media_type, b_paywall) -> str:
+    """
+    return string to inject into HTML with icons according to params
+    """
+    l_icon_list = [b_paywall and _ICON_PAYWALL]
+    l_icon_list.append(_ICON_MEDIA.get(s_media_type, False))
+    l_icon_list = list(filter(lambda x: x, l_icon_list))
+    s_icon_list = reduce(lambda l, x: l + x + '&nbsp;', l_icon_list, '')
+    if len(s_icon_list) > 0:
+        return '<span style="font-family:FontAwesome;">' +
+                s_icon_list + '</span>'
+    return ''
 
 
 def s_format_heading(s_text: str) -> str:
@@ -29,7 +45,8 @@ def s_format_entry(
         s_url: str,
         s_media: str,
         s_date: str,
-        s_media_type='other'
+        s_media_type='other',
+        b_paywall=False
         ) -> str:
     """
     format complete record
@@ -62,7 +79,7 @@ def s_format_entry(
 
     s_result = (
         '{0}{1}<i>{2}</i>{3}'
-        .format(s_prefix, _MEDIA_ICON.get(s_media_type, ''), s_title, s_suffix)
+        .format(s_prefix, s_icons(s_media_type, b_paywall), s_title, s_suffix)
         )
 
     # media, date
