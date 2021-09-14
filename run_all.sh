@@ -26,7 +26,7 @@ _do_syntax lib/metadata_params.py
 _do_syntax ma_tools.py
 _do_syntax test/
 python3 lib/metadata_check_reports.py -v
-python3 lib/metadata_check_reports.py -v
+python3 lib/metadata_check_tools.py -v
 python3 lib/metadata_params.py -v
 python3 lib/metadata_list2_htm.py -v
 python3 -m unittest -v

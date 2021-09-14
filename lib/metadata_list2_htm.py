@@ -25,7 +25,7 @@ def s_icons(s_media_type, b_paywall) -> str:
     l_icon_list = list(filter(lambda x: x, l_icon_list))
     s_icon_list = reduce(lambda l, x: l + x + '&nbsp;', l_icon_list, '')
     if len(s_icon_list) > 0:
-        return '<span style="font-family:FontAwesome;">' +
+        return '<span style="font-family:FontAwesome;">' + \
                 s_icon_list + '</span>'
     return ''
 

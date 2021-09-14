@@ -159,7 +159,8 @@ def main():
 
     if args.tool == r'row':
         import lib.main_row
-        sys.exit(lib.main_row.main(args.media))
+        lib.main_row.main()
+        sys.exit(0)
 
     if args.tool == r'list2p':
         import lib.main_list2p
