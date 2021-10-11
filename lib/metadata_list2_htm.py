@@ -1,7 +1,7 @@
 """metadata_list2_htm
 
-provides several HTML formatting functions to be used by list2, list2p
-to ensure consistent formatting
+provides several HTML formatting functions to be used by list2, list2p,
+row to ensure consistent formatting
 """
 from html import escape
 from functools import reduce
@@ -9,21 +9,21 @@ import datetime
 
 from .metadata_check_tools import s_fix_url_for_html
 
-_ICON_PAYWALL = '&#xf023;'
-_ICON_MEDIA = {
-    'video': '&#xf03d;',
-    'audio': '&#xf130;'
-}
+_ICON_LIST = {
+    '#paywall': '&#xf023;',
+    '#video': '&#xf03d;',
+    '#audio': '&#xf130;'
+    }
 
 
-def s_icons(s_media_type, b_paywall) -> str:
+def s_icons(sl_tags: list) -> str:
     """
-    return string to inject into HTML with icons according to params
+    return string to inject into HTML with icons according to params,
+    ignore tags not in _ICON_LIST
     """
-    l_icon_list = [b_paywall and _ICON_PAYWALL]
-    l_icon_list.append(_ICON_MEDIA.get(s_media_type, False))
-    l_icon_list = list(filter(lambda x: x, l_icon_list))
-    s_icon_list = reduce(lambda l, x: l + x + '&nbsp;', l_icon_list, '')
+    ls_icon_list = filter(lambda x: x in _ICON_LIST.keys(), sl_tags)
+    ls_icon_list = list(map(lambda x: _ICON_LIST[x], ls_icon_list))
+    s_icon_list = reduce(lambda l, x: l + x + '&nbsp;', ls_icon_list, '')
     if len(s_icon_list) > 0:
         return '<span style="font-family:FontAwesome;">' + \
                 s_icon_list + '</span>'
@@ -45,8 +45,7 @@ def s_format_entry(
         s_url: str,
         s_media: str,
         s_date: str,
-        s_media_type='other',
-        b_paywall=False
+        sl_tags: list
         ) -> str:
     """
     format complete record
@@ -79,7 +78,7 @@ def s_format_entry(
 
     s_result = (
         '{0}{1}<i>{2}</i>{3}'
-        .format(s_prefix, s_icons(s_media_type, b_paywall), s_title, s_suffix)
+        .format(s_prefix, s_icons(sl_tags), s_title, s_suffix)
         )
 
     # media, date

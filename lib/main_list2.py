@@ -21,6 +21,7 @@ from lib import ErrorReports as ER
 from lib import report_log
 from lib import s_format_heading
 from lib import s_format_entry
+from lib import TagString
 
 
 def main(s_config_filename: str) -> None:
@@ -102,13 +103,24 @@ def main(s_config_filename: str) -> None:
             o_output_file.write(
                 "<p>" + s_format_heading(ts_row[7]) + "<br />\n")
 
+        # determine icons
+
+        o_tags = TagString(ts_row[13])
+        o_tags.with_simple('#paywall')
+        o_tags.with_excls('#media_type', ['#video', '#audio'])
+        sl_tags = []
+        if o_tags.b_has_simple_tag('#paywall'):
+            sl_tags.append('#paywall')
+        sl_tags.append(o_tags.s_get_excls_tag('#media_type', '#other'))
+
         o_output_file.write(
             s_format_entry(
                 ts_row[0],  # title
                 ts_row[1],  # subtitle
                 ts_row[2],  # url
                 ts_row[3],  # media
-                ts_row[5]   # date
+                ts_row[5],  # date
+                sl_tags
                 ))
 
         o_output_file.write('<br />\n')

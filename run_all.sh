@@ -14,7 +14,6 @@ _do_syntax lib/main_check.py
 _do_syntax lib/main_files.py
 _do_syntax lib/main_list1.py
 _do_syntax lib/main_list2.py
-_do_syntax lib/main_list2p.py
 _do_syntax lib/main_load.py
 _do_syntax lib/main_make.py
 _do_syntax lib/main_ping.py
@@ -23,6 +22,7 @@ _do_syntax lib/metadata_check_reports.py
 _do_syntax lib/metadata_check_tools.py
 _do_syntax lib/metadata_list2_htm.py
 _do_syntax lib/metadata_params.py
+_do_syntax lib/class_tagstring.py
 _do_syntax ma_tools.py
 _do_syntax test/
 python3 lib/metadata_check_reports.py -v

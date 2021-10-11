@@ -34,10 +34,6 @@ Syntax:
             makefn  helper to create local backup filenames from
                     date and title + optionally subtitle entries
 
-            list2p  create a list2 snippet from a single record (row)
-                    provided in the clipboard; return entry in clipboard
-                    ready to insert into HTML file
-
     options:
 
     -c, --config        path and filename of configuration file
@@ -46,8 +42,6 @@ Syntax:
     -x, --exist         check if files exist (check only)
     -h, --help          outputs this text or specific information about
                         the selected tool
-    -m, --media         inserts an icon for specific media types, i.e.
-                        'video', 'audio' (row only)
     -v, --version       reports the version of program
 """
 # The above is the help text output for -h/--help !!
@@ -59,7 +53,7 @@ import sys
 
 LS_SUBCMD = [r'check', r'load', r'ping',
              r'list1', r'list2', r'files', r'help',
-             r'row', r'list2p', r'makefn']
+             r'row', r'makefn']
 
 # versioning:   major.minor.intermediate
 #
@@ -67,7 +61,7 @@ LS_SUBCMD = [r'check', r'load', r'ping',
 #               minor increments with documentation update
 #               major increments with new documentation
 
-MA_VERSION = "1.4.0"
+MA_VERSION = "1.5.0"
 
 
 class ArgumentParser(argparse.ArgumentParser):
@@ -91,10 +85,6 @@ def init_argparse() -> ArgumentParser():
     parser.add_argument(
         r'tool', choices=LS_SUBCMD, nargs='?',
         default=r'help'
-    )
-    parser.add_argument(
-        r'-m', r'--media', choices=['other', 'video', 'audio'], nargs='?',
-        default=r'other'
     )
     parser.add_argument(
         r'-v', r'--version', action=r'version',
@@ -160,11 +150,6 @@ def main():
     if args.tool == r'row':
         import lib.main_row
         lib.main_row.main()
-        sys.exit(0)
-
-    if args.tool == r'list2p':
-        import lib.main_list2p
-        lib.main_list2p.main()
         sys.exit(0)
 
     if args.tool == r'help':

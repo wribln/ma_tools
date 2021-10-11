@@ -15,6 +15,7 @@ from lib import s_format_heading
 from lib import s_format_entry
 from lib import s_make_backup_filename
 from lib import s_check_date
+from lib import TagString
 
 # the following are indeces into the row being processed:
 
@@ -87,6 +88,7 @@ def main() -> None:
             if len(re.findall('\n', l_record[i_col])) > 0:
                 print(
                     '>>> Column {0} contains new line characters.'
+                    .format(i_col)
                 )
                 return False
 
@@ -117,15 +119,26 @@ def main() -> None:
 
     # check remarks for tags
 
-    b_paywall = (re.search('#paywall', l_record[_COL_COMMENT], re.I)
-                 is not None)
+    o_tags = TagString(l_record[_COL_COMMENT])
+    o_tags.with_simple('#paywall')
+    o_tags.with_excls('#media_type', ['#video', '#audio'])
+    i_check = o_tags.i_check_tags()
+    if i_check > 0:
+        print(
+            '>>> Issue with tags in column {0}, code: {1}'
+            .format(_COL_COMMENT, i_check)
+            )
+    ls_bad_tags = o_tags.l_unknown_tags()
+    if len(ls_bad_tags) > 0:
+        print(
+            '>>> Unknown tags in column {0}: {1}.'
+            .format(_COL_COMMENT, ls_bad_tags)
+            )
 
-    if re.search('#video', l_record[_COL_COMMENT], re.I) is not None:
-        s_media_type = 'video'
-    elif re.search('#audio', l_record[_COL_COMMENT], re.I) is not None:
-        s_media_type = 'audio'
-    else:
-        s_media_type = 'other'
+    sl_tags = []
+    if o_tags.b_has_simple_tag('#paywall'):
+        sl_tags.append('#paywall')
+    sl_tags.append(o_tags.s_get_excls_tag('#media_type', '#other'))
 
     # done checking and preparing, ready to start output
 
@@ -143,8 +156,7 @@ def main() -> None:
         l_record[_COL_URL],
         l_record[_COL_MEDIA],
         l_record[_COL_DATE],
-        s_media_type,
-        b_paywall))
+        sl_tags))
     print()
 
     pyperclip.copy(s_filename)

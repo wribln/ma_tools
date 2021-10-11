@@ -11,4 +11,5 @@ from .metadata_check_tools import b_is_valid_path
 from .metadata_check_tools import s_fix_url_for_html
 from .metadata_check_tools import s_make_backup_filename
 from .metadata_params import ConfigParams
+from .class_tagstring import *
 from .metadata_list2_htm import *

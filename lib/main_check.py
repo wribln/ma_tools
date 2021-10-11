@@ -17,7 +17,7 @@ from os.path import basename, splitext
 from lib import ErrorReports, ConfigParams
 from lib import report_log, s_check_for_valid_file, \
     s_url_is_alive, s_trim, ls_import_valid_string_values, b_is_valid_path, \
-    s_check_url, s_make_backup_filename, s_check_date
+    s_check_url, s_make_backup_filename, s_check_date, TagString
 
 
 def fix_labels(n_max_col: int, sl_labels: list):
@@ -372,6 +372,36 @@ def main(
                                 sl_labels[i_column],
                                 ('\n{0}\n{1}\n')
                                 .format(s_check_item, s_result)
+                            )
+
+                # check tags in notes
+
+                if b_pass_basic_checks('notes', sl_row):
+                    o_result = TagString(s_check_item)
+                    o_result.with_simple('#paywall')
+                    o_result.with_excls('#media_type', ['#video', '#audio'])
+                    i_check = o_result.i_check_tags()
+                    if i_check == 1:
+                        o_error.report_with_std_msg(
+                            o_reader.line_num,
+                            sl_labels[i_column],
+                            ('Multiple tags of same group encountered\n{0}')
+                            .format(s_trim(s_check_item, 80))
+                            )
+                    elif i_check == 2:
+                        o_error.report_with_std_msg(
+                            o_reader.line_num,
+                            sl_labels[i_column],
+                            ('Duplicate tags encountered\n{0}')
+                            .format(s_trim(s_check_item, 80))
+                            )
+                    elif i_check == 3:
+                        o_error.report_with_std_msg(
+                            o_reader.line_num,
+                            sl_labels[i_column],
+                            ('At least one date tag contains ' +
+                             'an invalid date\n{0}')
+                            .format(s_trim(s_check_item, 80))
                             )
 
                 # check if link can be reached
