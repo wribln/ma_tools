@@ -379,7 +379,10 @@ def main(
                 if b_pass_basic_checks('notes', sl_row):
                     o_result = TagString(s_check_item)
                     o_result.with_simple('#paywall')
-                    o_result.with_excls('#media_type', ['#video', '#audio'])
+                    o_result.with_excls(
+                        '#media_type',
+                        ['#video', '#audio', '#pdf']
+                        )
                     i_check = o_result.i_check_tags()
                     if i_check == 1:
                         o_error.report_with_std_msg(

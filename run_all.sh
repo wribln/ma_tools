@@ -25,8 +25,8 @@ _do_syntax lib/metadata_params.py
 _do_syntax lib/class_tagstring.py
 _do_syntax ma_tools.py
 _do_syntax test/
-python3 lib/metadata_check_reports.py -v
-python3 lib/metadata_check_tools.py -v
-python3 lib/metadata_params.py -v
-python3 lib/metadata_list2_htm.py -v
+python3 -m lib.metadata_check_reports -v
+python3 -m lib.metadata_check_tools -v
+python3 -m lib.metadata_params -v
+python3 -m lib.metadata_list2_htm -v
 python3 -m unittest -v

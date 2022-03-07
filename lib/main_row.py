@@ -121,7 +121,7 @@ def main() -> None:
 
     o_tags = TagString(l_record[_COL_COMMENT])
     o_tags.with_simple('#paywall')
-    o_tags.with_excls('#media_type', ['#video', '#audio'])
+    o_tags.with_excls('#media_type', ['#video', '#audio', '#pdf'])
     i_check = o_tags.i_check_tags()
     if i_check > 0:
         print(

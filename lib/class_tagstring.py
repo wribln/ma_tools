@@ -72,6 +72,12 @@ class TagString:
             self._s_tagged_string, re.I)
         self._d_tag_dict = dict()
 
+    def s_get_tag_prefix(self) -> str:
+        """
+        returns tag prefix
+        """
+        return self._s_tag_prefix
+
     def i_check_tags(self, n_tags=None) -> int:
         """
         utility to determine (internal) consistency using asserts

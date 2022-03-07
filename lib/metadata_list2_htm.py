@@ -12,7 +12,8 @@ from .metadata_check_tools import s_fix_url_for_html
 _ICON_LIST = {
     '#paywall': '&#xf023;',
     '#video': '&#xf03d;',
-    '#audio': '&#xf130;'
+    '#audio': '&#xf130;',
+    '#pdf': '&#xf1c1;'
     }
 
 

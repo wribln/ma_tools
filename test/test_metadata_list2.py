@@ -5,9 +5,11 @@ test class ErrorReports in metadata_check_reports
 import unittest
 import lib
 
+
 def s_output(s_icons: str) -> str:
     """ create result for comparison """
     return '<span style="font-family:FontAwesome;">' + s_icons + '</span>'
+
 
 class TestMetadataList2(unittest.TestCase):
     """
