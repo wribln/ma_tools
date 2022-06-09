@@ -65,7 +65,7 @@ class TagString:
         assert (re.search(s_tag_prefix, _TAG_CHARSET) is None), \
             "s_tag_prefix must not be a character which can be " \
             "used in a tag itself"
-        self._s_tagged_string = s_tagged_string
+        self._s_tagged_string = str(s_tagged_string or '')
         self._s_tag_prefix = s_tag_prefix
         self._l_tag_list = re.findall(
             '\\' + self._s_tag_prefix + _TAG_CHARSET + '\\b',

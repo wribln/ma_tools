@@ -139,6 +139,7 @@ def main() -> None:
     if o_tags.b_has_simple_tag('#paywall'):
         sl_tags.append('#paywall')
     sl_tags.append(o_tags.s_get_excls_tag('#media_type', '#other'))
+    s_icon_list = s_icons(sl_tags)
 
     # done checking and preparing, ready to start output
 
@@ -156,7 +157,7 @@ def main() -> None:
         l_record[_COL_URL],
         l_record[_COL_MEDIA],
         l_record[_COL_DATE],
-        sl_tags))
+        s_icon_list))
     print()
 
     pyperclip.copy(s_filename)

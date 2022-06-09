@@ -18,7 +18,8 @@ Syntax:
                     (-c, --config)
 
             list<n> create a listing of the metadata
-                    (-c, --config)
+                    (-c, --config, [-m, --month])
+                    -m, --month used only for list3
 
             files   utility to check if files in database match
                     files in archive folder
@@ -38,6 +39,9 @@ Syntax:
 
     -c, --config        path and filename of configuration file
                         (defaults to ma_tools.ini)
+    -m, --month         value format: YYYY-MM
+                        month to be reported (list3 only),
+                        defaults to previous month
     -p, --ping          check if urls exist (check only)
     -x, --exist         check if files exist (check only)
     -h, --help          outputs this text or specific information about
@@ -51,8 +55,8 @@ import argparse
 import sys
 
 
-LS_SUBCMD = [r'check', r'load', r'ping',
-             r'list1', r'list2', r'files', r'help',
+LS_SUBCMD = [r'check', r'load', r'ping', r'list1',
+             r'list2', r'list3', r'files', r'help',
              r'row', r'makefn']
 
 # versioning:   major.minor.intermediate
@@ -61,7 +65,7 @@ LS_SUBCMD = [r'check', r'load', r'ping',
 #               minor increments with documentation update
 #               major increments with new documentation
 
-MA_VERSION = "1.6.0"
+MA_VERSION = "1.7.0"
 
 
 class ArgumentParser(argparse.ArgumentParser):
@@ -102,6 +106,10 @@ def init_argparse() -> ArgumentParser():
     parser.add_argument(
         r'-x', r'--exist', action=r'store_true',
         default=False
+    )
+    parser.add_argument(
+        r'-m', r'--month',
+        default=None
     )
     return parser
 
@@ -146,6 +154,10 @@ def main():
         import lib.main_list2
         lib.main_list2.main(args.config.name)
         sys.exit(0)
+
+    if args.tool == r'list3':
+        import lib.main_list3
+        sys.exit(lib.main_list3.main(args.config.name, args.month))
 
     if args.tool == r'row':
         import lib.main_row

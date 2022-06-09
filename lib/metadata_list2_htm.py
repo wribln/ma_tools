@@ -1,6 +1,6 @@
 """metadata_list2_htm
 
-provides several HTML formatting functions to be used by list2, list2p,
+provides several HTML formatting functions to be used by list2
 row to ensure consistent formatting
 """
 from html import escape
@@ -16,6 +16,13 @@ _ICON_LIST = {
     '#pdf': '&#xf1c1;'
     }
 
+_SUP_LIST = {
+    '#paywall': 'Paywall',
+    '#video': 'Video',
+    '#audio': 'Audio',
+    '#pdf': 'PDF'
+    }
+
 
 def s_icons(sl_tags: list) -> str:
     """
@@ -24,10 +31,21 @@ def s_icons(sl_tags: list) -> str:
     """
     ls_icon_list = filter(lambda x: x in _ICON_LIST.keys(), sl_tags)
     ls_icon_list = list(map(lambda x: _ICON_LIST[x], ls_icon_list))
-    s_icon_list = reduce(lambda l, x: l + x + '&nbsp;', ls_icon_list, '')
+    s_icon_list = '&nbsp;'.join(ls_icon_list)
     if len(s_icon_list) > 0:
         return '<span style="font-family:FontAwesome;">' + \
-                s_icon_list + '</span>'
+                s_icon_list + '&nbsp;</span>'
+    return ''
+
+def s_sups(sl_tags: list) -> str:
+    """
+    return string to inject into HTML with superscript tags
+    """
+    ls_sup_list = filter(lambda x: x in _SUP_LIST.keys(), sl_tags)
+    ls_sup_list = list(map(lambda x: _SUP_LIST[x], ls_sup_list))
+    s_sup_list = ',&nbsp;'.join(ls_sup_list)
+    if len(s_sup_list) > 0:
+        return '<sup>&nbsp;' + s_sup_list + '</sup>'
     return ''
 
 
@@ -46,10 +64,13 @@ def s_format_entry(
         s_url: str,
         s_media: str,
         s_date: str,
-        sl_tags: list
+        s_icon_list='',
+        s_sups_list=''
         ) -> str:
     """
     format complete record
+    s_icon_list will be placed before record,
+    s_sups_list will be placed after record
     """
 
     # title + subtitle
@@ -79,7 +100,7 @@ def s_format_entry(
 
     s_result = (
         '{0}{1}<i>{2}</i>{3}'
-        .format(s_prefix, s_icons(sl_tags), s_title, s_suffix)
+        .format(s_prefix, s_icon_list, s_title, s_suffix)
         )
 
     # media, date
@@ -105,7 +126,7 @@ def s_format_entry(
         s_item = ', '.join(filter(None, (s_media, s_date)))
 
         if len(s_item) > 0:
-            s_result += ' ({0})'.format(s_item)
+            s_result += ' ({0}){1}'.format(s_item, s_sups_list)
 
     return s_result
 
