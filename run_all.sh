@@ -14,6 +14,7 @@ _do_syntax lib/main_check.py
 _do_syntax lib/main_files.py
 _do_syntax lib/main_list1.py
 _do_syntax lib/main_list2.py
+_do_syntax lib/main_list3.py
 _do_syntax lib/main_load.py
 _do_syntax lib/main_make.py
 _do_syntax lib/main_ping.py

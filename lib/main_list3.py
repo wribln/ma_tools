@@ -19,7 +19,6 @@ import re
 
 from os.path import basename, splitext
 from dateutil.relativedelta import relativedelta
-from dateutil.parser import isoparse
 
 from lib import ConfigParams as CP
 from lib import ErrorReports as ER
@@ -30,10 +29,7 @@ from lib import s_sups
 from lib import TagString
 
 
-def main(
-    s_config_filename: str,
-    s_month: str
-    ) -> int:
+def main(s_config_filename: str, s_month: str) -> int:
     """
     main program
     """
@@ -98,6 +94,7 @@ def main(
         '''
         SELECT m.title, m.subtitle, m.url, m.media, m.url_ok,
         m.date, m.region_label, m.notes, m.region_level
+        FROM {0} AS m
         WHERE (m.title IS NOT NULL)
         AND (m.url_ok) AND (m.rating IN ("1","2","3","4"))
         AND (m.date LIKE "{1}%")
@@ -117,12 +114,12 @@ def main(
 
         # new group?
 
-        if s_last_place != ts_row[8]:
+        if s_last_place != ts_row[6]:
             if n_count > 1:
                 o_output_file.write('\n</p>\n')
-            s_last_place = ts_row[8]
+            s_last_place = ts_row[6]
             o_output_file.write(
-                s_format_heading(ts_row[8]) + '\n<p>\n')
+                s_format_heading(ts_row[6]) + '\n<p>\n')
         else:
             o_output_file.write('<br />\n')
 
