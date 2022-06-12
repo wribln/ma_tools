@@ -71,17 +71,12 @@ def main(s_config_filename: str) -> None:
     s_request = (
         '''
         SELECT m.title, m.subtitle, m.url, m.media, m.url_ok,
-        m.date, m.region, m.notes,
-        CASE WHEN m.region=="DE" THEN "Deutschland" ELSE
-        CASE WHEN m.region=="DE-BE" THEN "Berlin"  ELSE
-        CASE WHEN m.region=="DE-HH" THEN "Hamburg" ELSE m.place END END END
-        AS "xplace",
-        CASE WHEN m.region=="DE" THEN 1 ELSE 2 END AS "xorder"
+        m.date, m.region_label, m.notes, m.region_level
         FROM {0} AS m
         WHERE (m.title IS NOT NULL) AND
         (SUBSTR(m.region, 1, 2)=="DE")
         AND (m.url_ok) AND (m.rating IN ("1","2","3"))
-        ORDER BY xorder ASC, xplace ASC, m.date DESC;
+        ORDER BY m.region_level ASC, m.region_label ASC, m.date DESC;
         '''
         .format(CP.METADATA_TABLE)
         )
@@ -97,11 +92,11 @@ def main(s_config_filename: str) -> None:
 
         # new group?
 
-        if s_last_place != ts_row[8]:
+        if s_last_place != ts_row[6]:
             if n_count > 1:
                 o_output_file.write('</p>\n')
-            s_last_place = ts_row[8]
-            o_output_file.write(s_format_heading(ts_row[8]) + '\n<p>\n')
+            s_last_place = ts_row[6]
+            o_output_file.write(s_format_heading(ts_row[6]) + '\n<p>\n')
         else:
             o_output_file.write('<br />\n')
 

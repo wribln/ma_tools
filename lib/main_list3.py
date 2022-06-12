@@ -4,6 +4,8 @@ Prepare a publications listing for the given month in regional order
 and reverse chronological order; output is written to a file with the
 same name as this file and having the extension .htm
 
+Note: Only items with a rating of 1...4 are listed!
+
 Format is for use in mailings
 """
 # pylint: disable=R0912
@@ -95,18 +97,11 @@ def main(
     s_request = (
         '''
         SELECT m.title, m.subtitle, m.url, m.media, m.url_ok,
-        m.date, m.region, m.notes,
-        CASE WHEN m.region=="DE" THEN "Deutschland" ELSE
-        CASE WHEN m.region=="DE-BE" THEN "Berlin"  ELSE
-        CASE WHEN m.region=="DE-HH" THEN "Hamburg" ELSE m.place END END END
-        AS "xplace",
-        CASE WHEN m.region=="DE" THEN 1 ELSE 2 END AS "xorder"
-        FROM {0} AS m
-        WHERE (m.title IS NOT NULL) AND
-        (SUBSTR(m.region, 1, 2)=="DE")
+        m.date, m.region_label, m.notes, m.region_level
+        WHERE (m.title IS NOT NULL)
         AND (m.url_ok) AND (m.rating IN ("1","2","3","4"))
         AND (m.date LIKE "{1}%")
-        ORDER BY xorder ASC, xplace ASC, m.date;
+        ORDER BY m.region_level ASC, m.region_label ASC, m.date;
         '''
         .format(CP.METADATA_TABLE, s_month)
         )

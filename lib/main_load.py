@@ -1,7 +1,16 @@
 """load
 
 The metadata loaddb support app loads the metadata into a local database
-for further processing.
+for further processing. While loading, it will create some new fields,
+filling them for later use:
+- c_region: computed region, i.e. the label from the region field, or
+  a label calculated from the region_code and the related texts in the
+  regions table
+The following fields are true by default (to ease other processing) but
+can be set using respective tests by the ping utility:
+- url_ok: true if the URL can be reached
+- ref_ok: true if the reference copy was found
+
 """
 # pylint: disable=C0321
 # pylint: disable=W0401
@@ -24,6 +33,29 @@ def ls_replace_empty_string_by_none(sl_list: list) -> list:
     strings to be stored as NULL
     """
     return [(item or None) for item in sl_list]
+
+def t_determine_place_label(
+    s_place: str,
+    s_region: str,
+    db_cursor) -> tuple():
+    """
+    determine a label for the place from the region table
+    if none was given
+    """
+    if s_place is None:
+        sl_place_labels = db_cursor.execute(
+            'SELECT country_name, region_name FROM {0} '
+            'WHERE region_code = "{1}"'
+            .format(CP.REGIONS_TABLE, s_region)).fetchone()
+        if sl_place_labels is None:
+            t_place_label = (None, 0)
+        elif sl_place_labels[1] is None:
+            t_place_label = (sl_place_labels[0], 1)
+        else:
+            t_place_label = (sl_place_labels[1], 2)
+    else:
+        t_place_label = (s_place, 3)
+    return t_place_label
 
 
 def main(s_config_filename: str) -> None:
@@ -114,14 +146,23 @@ def main(s_config_filename: str) -> None:
         sl_items[i_col] = s_item
 
     s_db_cmd += (
-        'url_ok BOOLEAN DEFAULT 0 NOT NULL,'
+        'region_label TEXT, '
+        'region_level INT, '
+        'url_ok BOOLEAN DEFAULT 0 NOT NULL, '
         'ref_ok BOOLEAN DEFAULT 0 NOT NULL);'
     )
     o_dbcursor.execute(s_db_cmd)
 
+    i_col_place = id_items['place']
+    i_col_region = id_items['region']
+
     s_ic_cmd = 'INSERT INTO ' + CP.METADATA_TABLE + ' (ID,'
     s_ic_cmd += ','.join(sl_items)
     s_ic_cmd += ') VALUES (' + '?,' * n_max_col + '?);'
+
+    s_up_cmd = 'UPDATE ' + CP.METADATA_TABLE
+    s_up_cmd += ' SET region_label = ?, region_level = ?,'
+    s_up_cmd += ' url_ok = ?, ref_ok = ? WHERE ID = ?;'
 
     try:
         with open(s_filepath, 'r') as o_file:
@@ -131,7 +172,13 @@ def main(s_config_filename: str) -> None:
                 raise StopIteration()
             for sl_row in o_reader:
                 sl_row = ls_replace_empty_string_by_none(sl_row[:n_max_col])
+                a_place_label = t_determine_place_label(
+                    sl_row[i_col_place],
+                    sl_row[i_col_region],
+                    o_dbcursor)
                 o_dbcursor.execute(s_ic_cmd, [o_reader.line_num] + sl_row)
+                o_dbcursor.execute(s_up_cmd, list(a_place_label) +
+                    [True, True, o_reader.line_num])
                 o_dbconn.commit()
 
     except IOError as o_this_error:
