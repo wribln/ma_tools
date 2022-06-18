@@ -16,6 +16,7 @@ from lib import s_format_entry
 from lib import s_make_backup_filename
 from lib import s_check_date
 from lib import TagString
+from lib import s_icons
 
 # the following are indeces into the row being processed:
 
