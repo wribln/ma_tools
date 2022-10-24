@@ -64,7 +64,7 @@ def s_fix_url_for_html(s_url: str) -> str:
 
     """
     assert s_url is not None, 'None is not a valid string'
-    s_new_url = quote(s_url, r"\./_-:&,")
+    s_new_url = quote(s_url, r"\./_-:&,=?")
     return s_new_url.replace('&', '&amp;')
 
 
