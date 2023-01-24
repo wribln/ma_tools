@@ -55,8 +55,36 @@ def s_format_heading(s_text: str) -> str:
     """
     return "<h3>{0}</h3>".format(s_text)
 
-# pylint: disable=too-many-arguments
 
+def s_format_date(s_date: str) -> str:
+    """
+    return a useful date string - none if date is not valid
+    """
+    try:
+        ls_date = s_date.split('-')
+        if len(ls_date) == 1:
+            s_date = datetime.date(
+               int(ls_date[0]), 1, 1).strftime('%Y')
+        elif len(ls_date) == 2:
+            s_date = datetime.date(
+                int(ls_date[0]),
+                int(ls_date[1]),
+                1).strftime('%B %Y')
+        elif len(ls_date) == 3:
+            s_date = datetime.date(
+                int(ls_date[0]),
+                int(ls_date[1]),
+                int(ls_date[2])).strftime('%d. %B %Y')
+        else:
+            s_date = None
+
+    except:
+        s_date = None
+
+    return s_date
+
+
+# pylint: disable=too-many-arguments
 
 def s_format_entry(
         s_maintitle: str,
@@ -105,28 +133,10 @@ def s_format_entry(
 
     # media, date
 
-    if s_date is not None:
-        ls_date = s_date.split('-')
-        if len(ls_date) == 1:
-            s_date = datetime.date(
-               int(ls_date[0]), 1, 1).strftime('%Y')
-        elif len(ls_date) == 2:
-            s_date = datetime.date(
-                int(ls_date[0]),
-                int(ls_date[1]),
-                1).strftime('%B %Y')
-        elif len(ls_date) == 3:
-            s_date = datetime.date(
-                int(ls_date[0]),
-                int(ls_date[1]),
-                int(ls_date[2])).strftime('%d. %B %Y')
-        else:
-            s_date = None
+    s_item = ', '.join(filter(None, (s_media, s_format_date(s_date))))
 
-        s_item = ', '.join(filter(None, (s_media, s_date)))
-
-        if len(s_item) > 0:
-            s_result += ' ({0}){1}'.format(s_item, s_sups_list)
+    if len(s_item) > 0:
+        s_result += ' ({0}){1}'.format(s_item, s_sups_list)
 
     return s_result
 
