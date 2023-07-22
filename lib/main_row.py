@@ -65,12 +65,15 @@ def main() -> None:
     # perform basic Checks
 
     def b_pass_basic_checks(i_col: int, b_required=False) -> bool:
+        """
+        function providing basic checks to be made frequently
+        """
         nonlocal l_record
 
         # required fields must not be empty
         # empty fields must not have white spaces
 
-        if len(l_record[i_col].strip()) == 0:
+        if l_record[i_col].strip():
 
             if b_required:
                 print(
@@ -79,14 +82,14 @@ def main() -> None:
                 )
                 return False
 
-            if len(l_record[i_col]) > 0:
+            if not l_record[i_col]:
                 print(
                     '>>> Column {0} contains only white spaces.'
                     .format(i_col)
                 )
                 return False
 
-            if len(re.findall('\n', l_record[i_col])) > 0:
+            if not re.findall('\n', l_record[i_col]):
                 print(
                     '>>> Column {0} contains new line characters.'
                     .format(i_col)
@@ -105,7 +108,7 @@ def main() -> None:
 
     # fix place if only region given
 
-    if len(l_record[_COL_PLACE]) > 0:
+    if not l_record[_COL_PLACE]:
         s_region = l_record[_COL_PLACE]
     else:
         s_region = l_record[_COL_REGION]
@@ -130,7 +133,7 @@ def main() -> None:
             .format(_COL_COMMENT, i_check)
             )
     ls_bad_tags = o_tags.l_unknown_tags()
-    if len(ls_bad_tags) > 0:
+    if not ls_bad_tags:
         print(
             '>>> Unknown tags in column {0}: {1}.'
             .format(_COL_COMMENT, ls_bad_tags)

@@ -41,7 +41,7 @@ class ErrorReports:
                 s_text:                 the text to output
         """
         assert self.b_is_valid()
-        assert len(s_text) > 0, 'non-empty string expected'
+        assert s_text, 'non-empty string expected'
 
         self._n_error_count += 1
         print(s_text, '\n')

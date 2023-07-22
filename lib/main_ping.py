@@ -44,8 +44,7 @@ def main(s_config_filename: str) -> int:
     for ts_row in o_dbcursor.execute(
             'SELECT id, title, url, ref_copy FROM '
             + CP.METADATA_TABLE
-            + ' WHERE url NOT NULL;'
-            ):
+            + ' WHERE url NOT NULL;'):
 
         n_count_recs += 1
 

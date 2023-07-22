@@ -94,7 +94,7 @@ class ConfigParams:
             'o_error not an ErrorReports instance'
         assert o_error.b_is_valid(), 'o_error must be valid'
         assert s_file is not None, 's_file must not be none'
-        assert len(s_file) > 0, 's_file must not be empty'
+        assert s_file, 's_file must not be empty'
 
         b_config_ok = True
         self._o_error = o_error
@@ -131,8 +131,8 @@ class ConfigParams:
 
         if not b_config_ok:
             sysexit(
-                 "Program aborted after reporting {0} errors."
-                 .format(o_error.n_error_count()))
+                "Program aborted after reporting {0} errors."
+                .format(o_error.n_error_count()))
 
     def s_get_config_filename(self, s_item: str) -> str:
         """

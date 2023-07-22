@@ -67,6 +67,10 @@ class TestImportValidStringValues(unittest.TestCase):
         self.assertEqual(s_list, [])
         self.assertEqual(o_error.n_error_count(), 3)
 
+        # reset access
+
+        os.chmod('test/test_check_tools_no_read.csv', 0o644)
+
     @patch('builtins.print')
     def test_header_problems(self, mock_print):
         """

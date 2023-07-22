@@ -35,7 +35,7 @@ class TestCheckParams(unittest.TestCase):
 
         self.assertIsNotNone(o_params)
 
-    def test_assertions_s_get_config_filename(self):
+    def test_a_s_get_config_filename(self):
         """
         test procedures
         """
@@ -56,7 +56,7 @@ class TestCheckParams(unittest.TestCase):
         self.assertEqual(
             o_params.s_get_config_filename('vv_ratings'), 'ratings.csv')
 
-    def test_assertions_s_get_config_path(self):
+    def test_a_s_get_config_path(self):
         """
         test if assertions are correctly implemented
         """
@@ -72,7 +72,7 @@ class TestCheckParams(unittest.TestCase):
             o_params.s_get_config_path('ref_files'),
             '~/Activities/RoA/Medienarchiv/archive/')
 
-    def test_assertions_i_get_config_item(self):
+    def test_a_i_get_config_item(self):
         """
         Tests assertions of i_get_config_item( s_section, s_item)
         """
@@ -92,7 +92,7 @@ class TestCheckParams(unittest.TestCase):
         self.assertRaises(
             AssertionError, o_params.i_get_config_item, None, 'metadata')
 
-    def test_assertions_i_get_max_column(self):
+    def test_a_i_get_max_column(self):
         """
         Tests assertions of i_get_max_columns(s_section)
         """
@@ -117,8 +117,8 @@ class TestCheckParams(unittest.TestCase):
             SystemExit, lib.ConfigParams,
             o_error, 'test/config_no_exist.ini')
         mock_print.assert_called_with(
-           'Problem with file >test/config_no_exist.ini<\n'
-           'File does not exist.', '\n')
+            'Problem with file >test/config_no_exist.ini<\n'
+            'File does not exist.', '\n')
 
         self.assertEqual(o_error.n_error_count(), 1)
 

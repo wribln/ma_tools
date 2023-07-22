@@ -93,6 +93,9 @@ def main(s_config_filename: str) -> None:
     di_result['m.ID'] = i_index
 
     def add_item(s_item: str):
+        """
+        helper function which adds a new item to the dictionary
+        """
         nonlocal s_request, i_index, di_result
         s_request += ', ' + s_item
         i_index += 1
@@ -209,7 +212,7 @@ def main(s_config_filename: str) -> None:
                     int(ls_item[2])).strftime('%d. %B %Y')
             else:
                 s_item = ''
-        if len(s_item) > 0:
+        if not s_item:
             o_output_file.write(', {0}'.format(s_item))
         o_output_file.write('.<br />\n')
 

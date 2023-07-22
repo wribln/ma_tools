@@ -4,7 +4,6 @@ provides several HTML formatting functions to be used by list2
 row to ensure consistent formatting
 """
 from html import escape
-from functools import reduce
 import datetime
 
 from .metadata_check_tools import s_fix_url_for_html
@@ -37,6 +36,7 @@ def s_icons(sl_tags: list) -> str:
                 s_icon_list + '&nbsp;</span>'
     return ''
 
+
 def s_sups(sl_tags: list) -> str:
     """
     return string to inject into HTML with superscript tags
@@ -64,7 +64,7 @@ def s_format_date(s_date: str) -> str:
         ls_date = s_date.split('-')
         if len(ls_date) == 1:
             s_date = datetime.date(
-               int(ls_date[0]), 1, 1).strftime('%Y')
+                int(ls_date[0]), 1, 1).strftime('%Y')
         elif len(ls_date) == 2:
             s_date = datetime.date(
                 int(ls_date[0]),
@@ -78,7 +78,7 @@ def s_format_date(s_date: str) -> str:
         else:
             s_date = None
 
-    except:
+    except ValueError:
         s_date = None
 
     return s_date
@@ -93,8 +93,7 @@ def s_format_entry(
         s_media: str,
         s_date: str,
         s_icon_list='',
-        s_sups_list=''
-        ) -> str:
+        s_sups_list='') -> str:
     """
     format complete record
     s_icon_list will be placed before record,
@@ -103,13 +102,13 @@ def s_format_entry(
 
     # title + subtitle
 
-    if s_maintitle is None or len(s_maintitle) == 0:
+    if s_maintitle is None or s_maintitle:
         s_title = '<???>'
     else:
         s_title = s_maintitle
     s_title = escape(s_title)
 
-    if s_subtitle is not None and len(s_subtitle) > 0:
+    if s_subtitle is not None and not s_subtitle:
         if s_subtitle[0] != '(':
             s_title += '&nbsp;&ndash;'
         s_title += ' ' + escape(s_subtitle)
@@ -135,7 +134,7 @@ def s_format_entry(
 
     s_item = ', '.join(filter(None, (s_media, s_format_date(s_date))))
 
-    if len(s_item) > 0:
+    if not s_item:
         s_result += ' ({0}){1}'.format(s_item, s_sups_list)
 
     return s_result

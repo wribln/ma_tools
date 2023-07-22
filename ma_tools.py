@@ -49,7 +49,6 @@ Syntax:
     -v, --version       reports the version of program
 """
 # The above is the help text output for -h/--help !!
-# pylint: disable=C0415
 
 import argparse
 import sys
@@ -65,7 +64,7 @@ LS_SUBCMD = [r'check', r'load', r'ping', r'list1',
 #               minor increments with documentation update
 #               major increments with new documentation
 
-MA_VERSION = "1.7.5"
+MA_VERSION = "1.7.6"
 
 
 class ArgumentParser(argparse.ArgumentParser):

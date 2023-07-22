@@ -34,10 +34,11 @@ def ls_replace_empty_string_by_none(sl_list: list) -> list:
     """
     return [(item or None) for item in sl_list]
 
+
 def t_determine_place_label(
-    s_place: str,
-    s_region: str,
-    db_cursor) -> tuple():
+        s_place: str,
+        s_region: str,
+        db_cursor) -> tuple():
     """
     determine a label for the place from the region table
     if none was given
@@ -177,7 +178,8 @@ def main(s_config_filename: str) -> None:
                     sl_row[i_col_region],
                     o_dbcursor)
                 o_dbcursor.execute(s_ic_cmd, [o_reader.line_num] + sl_row)
-                o_dbcursor.execute(s_up_cmd, list(a_place_label) +
+                o_dbcursor.execute(
+                    s_up_cmd, list(a_place_label) +
                     [True, True, o_reader.line_num])
                 o_dbconn.commit()
 

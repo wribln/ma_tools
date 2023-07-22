@@ -26,7 +26,7 @@ def fix_labels(n_max_col: int, sl_labels: list):
     """
     for i_column in range(0, n_max_col):
         if i_column < len(sl_labels):
-            if len(sl_labels[i_column]) > 0:
+            if sl_labels[i_column]:
                 sl_labels[i_column] = 'column {0} ({1})'.format(
                     sl_labels[i_column], i_column + 1)
                 continue
@@ -39,8 +39,7 @@ def fix_labels(n_max_col: int, sl_labels: list):
 def main(
         s_config_file: str,
         b_check_ext_links: bool,
-        b_check_int_links: bool
-        ) -> int:
+        b_check_int_links: bool) -> int:
     """
     main program - exits (1) on error, exits (0) if all checks passed
     """
@@ -143,7 +142,7 @@ def main(
 
                 i_column_rc = di_params['region_code']
                 s_item_rc = sl_row[i_column_rc].strip()
-                if len(s_item_rc) == 0:
+                if s_item_rc:
                     o_error.report_missing_field(
                         o_reader.line_num,
                         sl_labels[i_column_rc]
@@ -165,7 +164,7 @@ def main(
                 i_column_cn = di_params['country_name']
                 s_item_cn = sl_row[i_column_cn].strip()
 
-                if len(s_item_cn) == 0:
+                if s_item_cn:
                     o_error.report_missing_field(
                         o_reader.line_num,
                         sl_labels[i_column_cn]
@@ -175,13 +174,13 @@ def main(
                 s_item_rn = sl_row[i_column_rn].strip()
 
                 if len(s_item_rc) > 2:  # have a region code
-                    if len(s_item_rn) == 0:
+                    if s_item_rn:
                         o_error.report_missing_field(
                             o_reader.line_num,
                             sl_labels[i_column_rn]
                         )
                 else:  # no region code
-                    if len(s_item_rn) > 0:
+                    if not s_item_rn:
                         o_error.report_with_std_msg(
                             o_reader.line_num,
                             sl_labels[i_column_rn],
@@ -255,7 +254,7 @@ def main(
                     # empty items are permitted when not required
 
                     s_check_item = sl_row[i_column].strip()
-                    if len(s_check_item) == 0:
+                    if s_check_item:
                         if b_required:
                             o_error.report_with_std_msg(
                                 o_reader.line_num,
@@ -267,7 +266,7 @@ def main(
                     # must not permit newlines within strings as they
                     # are counted by o_reader.line_num
 
-                    if len(re.findall('\n', sl_row[i_column])) > 0:
+                    if not re.findall('\n', sl_row[i_column]):
                         o_error.report_with_std_msg(
                             o_reader.line_num,
                             sl_labels[i_column],
@@ -279,9 +278,8 @@ def main(
                 # check valid values (type, region)
 
                 for s_param, sd_vv in zip(
-                    ('type', 'region', 'rating'),
-                    (sl_vv_types, sl_vv_regions, sl_vv_ratings)
-                ):
+                        ('type', 'region', 'rating'),
+                        (sl_vv_types, sl_vv_regions, sl_vv_ratings)):
 
                     if not b_pass_basic_checks(s_param, sl_row):
                         continue
@@ -299,7 +297,7 @@ def main(
                 # if a place is given, region must also be given
 
                 if b_pass_basic_checks('place', sl_row):
-                    if len(s_check_item) > 0:
+                    if not s_check_item:
                         if b_pass_basic_checks('region', sl_row, True):
                             pass
                         else:
@@ -351,14 +349,14 @@ def main(
                     s_check_item = s_backup_path + s_check_item
                     s_basename = basename(s_check_item)
                     s_file_no_ext = splitext(s_basename)[0]
-                    if len(s_backup_filename) > 0 and \
+                    if not s_backup_filename and \
                             s_file_no_ext != s_backup_filename:
                         o_error.report_with_std_msg(
                             o_reader.line_num,
                             sl_labels[i_column],
                             ('Suggested filename S: '
-                                'does not match actual filename A:\n'
-                                'S: {0}\nA: {1}')
+                             'does not match actual filename A:\n'
+                             'S: {0}\nA: {1}')
                             .format(s_backup_filename, s_file_no_ext)
                         )
 

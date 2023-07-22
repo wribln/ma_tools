@@ -71,8 +71,7 @@ def s_fix_url_for_html(s_url: str) -> str:
 def ls_import_valid_string_values(
         s_csv_file: str,
         i_column: int,
-        o_error
-        ) -> list:
+        o_error) -> list:
     """
     Reads strings from the specified column of the given file with the
     name s_csv_file, returning a list of these strings.
@@ -139,7 +138,7 @@ def b_is_valid_path(s_path: str) -> bool:
     Validates given path
     """
     assert s_path is not None, 's_path must be a string'
-    assert len(s_path) > 0, 's_path must not be empty'
+    assert s_path, 's_path must not be empty'
 
     return os.path.isdir(s_path)
 
@@ -212,7 +211,7 @@ def s_check_for_valid_file(s_file: str, o_error=None) -> str:
                             cannot be used
     """
     assert s_file is not None, 's_file must be a string'
-    assert len(s_file) > 0, 's_file must not be empty'
+    assert s_file, 's_file must not be empty'
     assert o_error is None or o_error.b_is_valid(), \
         'error handling object must be None or ok'
 
@@ -273,7 +272,7 @@ def s_check_url(url: str) -> str:
     Checks if a given URL has a valid syntax.
     Returns error details or None.
     """
-    assert len(url.strip()) > 0, 'non-empty url required'
+    assert url.strip(), 'non-empty url required'
 
     if len(url) > 2048:
         return (
@@ -313,8 +312,7 @@ def s_url_is_alive(url: str) -> str:
             'User-Agent':
             'Mozilla/5.0 (X11; Linux x86_64; rv:78.0) '
             'Gecko/20100101 Firefox/78.0'
-            }
-        )
+            })
         urlopen(url_req)
     except HTTPError as u_error:
         return (
@@ -380,9 +378,9 @@ def s_make_backup_filename(s_date: str, s_title: str, s_subtitle: str) -> str:
     """
     assert len(s_date) == 8, 's_date must be exactly 8 characters long'
     s_filename = s_title
-    if len(s_title) == 0:
+    if not s_title:
         return ''
-    if s_title == 'Radeln ohne Alter' and len(s_subtitle) > 0:
+    if s_title == 'Radeln ohne Alter' and s_subtitle:
         s_filename = s_title + '_-_' + s_subtitle
     return s_date + '_' + s_make_filename(s_filename)
 
