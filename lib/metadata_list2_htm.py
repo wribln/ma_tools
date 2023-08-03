@@ -102,13 +102,13 @@ def s_format_entry(
 
     # title + subtitle
 
-    if s_maintitle is None or s_maintitle:
+    if s_maintitle is None or not s_maintitle:
         s_title = '<???>'
     else:
         s_title = s_maintitle
     s_title = escape(s_title)
 
-    if s_subtitle is not None and not s_subtitle:
+    if s_subtitle is not None and s_subtitle:
         if s_subtitle[0] != '(':
             s_title += '&nbsp;&ndash;'
         s_title += ' ' + escape(s_subtitle)
@@ -134,7 +134,7 @@ def s_format_entry(
 
     s_item = ', '.join(filter(None, (s_media, s_format_date(s_date))))
 
-    if not s_item:
+    if s_item:
         s_result += ' ({0}){1}'.format(s_item, s_sups_list)
 
     return s_result

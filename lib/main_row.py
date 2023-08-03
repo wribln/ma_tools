@@ -73,7 +73,7 @@ def main() -> None:
         # required fields must not be empty
         # empty fields must not have white spaces
 
-        if l_record[i_col].strip():
+        if not l_record[i_col].strip():
 
             if b_required:
                 print(
@@ -82,14 +82,14 @@ def main() -> None:
                 )
                 return False
 
-            if not l_record[i_col]:
+            if l_record[i_col]:
                 print(
                     '>>> Column {0} contains only white spaces.'
                     .format(i_col)
                 )
                 return False
 
-            if not re.findall('\n', l_record[i_col]):
+            if re.findall('\n', l_record[i_col]):
                 print(
                     '>>> Column {0} contains new line characters.'
                     .format(i_col)
@@ -108,7 +108,7 @@ def main() -> None:
 
     # fix place if only region given
 
-    if not l_record[_COL_PLACE]:
+    if l_record[_COL_PLACE]:
         s_region = l_record[_COL_PLACE]
     else:
         s_region = l_record[_COL_REGION]
@@ -133,7 +133,7 @@ def main() -> None:
             .format(_COL_COMMENT, i_check)
             )
     ls_bad_tags = o_tags.l_unknown_tags()
-    if not ls_bad_tags:
+    if ls_bad_tags: # list of bad tags is not empty
         print(
             '>>> Unknown tags in column {0}: {1}.'
             .format(_COL_COMMENT, ls_bad_tags)
