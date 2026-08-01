@@ -1,0 +1,8 @@
+[project]
+name = "ma-tools"
+version = "1.7.8"
+requires-python = ">=3.13"
+dependencies = [
+    "python-dateutil",
+    "pyperclip",
+]
